@@ -26,6 +26,55 @@
         revealEls.forEach((el) => el.classList.add('is-visible'));
     }
 
+    // ===== Hero 3D: saco acompanha o cursor + parallax sutil no scroll =====
+    const heroSection = document.getElementById('hero');
+    const hero3d = document.querySelector('.hero-3d');
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    if (heroSection && hero3d && !prefersReducedMotion && canHover) {
+        let ticking = false;
+        let targetRotX = 0;
+        let targetRotY = 0;
+
+        heroSection.addEventListener('mousemove', (event) => {
+            const rect = heroSection.getBoundingClientRect();
+            const relX = (event.clientX - rect.left) / rect.width - 0.5;
+            const relY = (event.clientY - rect.top) / rect.height - 0.5;
+            targetRotY = relX * 24;
+            targetRotX = relY * -18;
+
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    hero3d.style.setProperty('--tilt-x', `${targetRotX}deg`);
+                    hero3d.style.setProperty('--tilt-y', `${targetRotY}deg`);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        heroSection.addEventListener('mouseleave', () => {
+            hero3d.style.setProperty('--tilt-x', '0deg');
+            hero3d.style.setProperty('--tilt-y', '0deg');
+        });
+    }
+
+    if (heroSection && hero3d && !prefersReducedMotion) {
+        let heroVisible = true;
+
+        if ('IntersectionObserver' in window) {
+            const heroObserver = new IntersectionObserver((entries) => {
+                heroVisible = entries[0].isIntersecting;
+            });
+            heroObserver.observe(heroSection);
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!heroVisible) return;
+            hero3d.style.setProperty('--parallax-y', `${window.scrollY * 0.12}px`);
+        }, { passive: true });
+    }
+
     // ===== Confete discreto ao concluir o pedido =====
     const colors = ['#10B981', '#0D3B3D', '#D4AF37'];
 

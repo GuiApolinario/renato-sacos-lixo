@@ -10,7 +10,22 @@ window.WA = (function () {
         window.open(url, '_blank', 'noopener');
     }
 
-    function buildOrderMessage(data, items, total) {
+    function formatBRL(value) {
+        return `R$ ${value.toFixed(2).replace('.', ',')}`;
+    }
+
+    function shippingLine(shipping) {
+        if (!shipping || shipping.status === 'free') {
+            const km = shipping && shipping.distanceKm ? ` (~${shipping.distanceKm.toFixed(1)} km)` : '';
+            return `GRÁTIS ✓${km}`;
+        }
+        if (shipping.status === 'paid') {
+            return `${formatBRL(shipping.fee)} (~${shipping.distanceKm.toFixed(1)} km do CEP 18117-131)`;
+        }
+        return 'A CONFIRMAR — não foi possível calcular a distância automaticamente';
+    }
+
+    function buildOrderMessage(data, items, subtotal, shipping, total) {
         const itemsList = items
             .map((item) => `• ${item.quantity}x Saco ${item.size}L (30 un.) — R$ ${item.subtotal.toFixed(2).replace('.', ',')}`)
             .join('\n');
@@ -21,14 +36,16 @@ window.WA = (function () {
             `👤 CLIENTE: ${data.name}`,
             '',
             '📍 ENTREGA PARA:',
+            `CEP: ${data.cep}`,
             `${data.address}, ${data.neighborhood}`,
             `Complemento: ${data.complement}`,
             '',
             '📦 ITENS DO PEDIDO:',
             itemsList,
+            `Subtotal: ${formatBRL(subtotal)}`,
             '',
-            '🚚 FRETE: GRÁTIS ✓',
-            `💰 VALOR TOTAL: R$ ${total.toFixed(2).replace('.', ',')}`,
+            `🚚 FRETE: ${shippingLine(shipping)}`,
+            `💰 VALOR TOTAL: ${formatBRL(total)}`,
             '',
             '💳 PAGAMENTO PIX:',
             `Status: ${data.alreadyPaid ? 'Já paguei' : 'Vou pagar na entrega'}`,

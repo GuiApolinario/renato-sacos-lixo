@@ -8,18 +8,25 @@
     const STORAGE_KEY = 'renato-sacos-checkout-draft';
 
     const cart = new Map(); // size -> quantity
+    let shipping = { status: 'idle', distanceKm: null, fee: 0 }; // idle | loading | free | paid | unknown
 
     const form = document.getElementById('checkout-form');
     const productsGrid = document.getElementById('products-grid');
     const summaryItemsEl = document.getElementById('summary-items');
     const totalPriceEl = document.getElementById('total-price');
+    const shippingValueEl = document.getElementById('shipping-value');
     const summaryToggleTotalEl = document.getElementById('summary-toggle-total');
+    const summaryToggleCountEl = document.getElementById('summary-toggle-count');
     const orderSummary = document.getElementById('order-summary');
     const summaryToggle = document.getElementById('summary-toggle');
+    const summaryToggleCta = summaryToggle ? summaryToggle.querySelector('.summary-toggle-cta') : null;
+    const summaryCta = document.getElementById('summary-cta');
     const formError = document.getElementById('form-error');
     const btnSubmit = document.getElementById('btn-submit');
     const pixKeyEl = document.getElementById('pix-key');
     const copyPixBtn = document.getElementById('copy-pix');
+    const cepInput = document.getElementById('cep');
+    const cepFeedback = document.getElementById('cep-feedback');
 
     if (pixKeyEl) pixKeyEl.textContent = PIX_KEY;
 
@@ -31,7 +38,7 @@
         if ('vibrate' in navigator) navigator.vibrate(pattern);
     }
 
-    function calcTotal() {
+    function calcSubtotal() {
         let total = 0;
         cart.forEach((qty, size) => {
             total += PRICES[size] * qty;
@@ -39,7 +46,39 @@
         return total;
     }
 
+    function calcTotal() {
+        const freightFee = shipping.status === 'paid' ? shipping.fee : 0;
+        return calcSubtotal() + freightFee;
+    }
+
+    function renderShippingLine() {
+        if (!shippingValueEl) return;
+        shippingValueEl.classList.remove('shipping-value--pending', 'shipping-value--paid', 'shipping-value--unknown');
+
+        switch (shipping.status) {
+            case 'loading':
+                shippingValueEl.textContent = 'calculando…';
+                shippingValueEl.classList.add('shipping-value--pending');
+                break;
+            case 'free':
+                shippingValueEl.textContent = `GRÁTIS ✓ (~${shipping.distanceKm.toFixed(1)} km)`;
+                break;
+            case 'paid':
+                shippingValueEl.textContent = `${formatBRL(shipping.fee)} (~${shipping.distanceKm.toFixed(1)} km)`;
+                shippingValueEl.classList.add('shipping-value--paid');
+                break;
+            case 'unknown':
+                shippingValueEl.textContent = 'a combinar com o Renato';
+                shippingValueEl.classList.add('shipping-value--unknown');
+                break;
+            default:
+                shippingValueEl.textContent = 'informe o CEP';
+                shippingValueEl.classList.add('shipping-value--pending');
+        }
+    }
+
     function updateSummary() {
+        const subtotal = calcSubtotal();
         const total = calcTotal();
 
         if (cart.size === 0) {
@@ -47,20 +86,89 @@
         } else {
             summaryItemsEl.innerHTML = '';
             cart.forEach((qty, size) => {
-                const subtotal = PRICES[size] * qty;
+                const itemSubtotal = PRICES[size] * qty;
                 const item = document.createElement('div');
                 item.className = 'summary-item';
                 item.innerHTML = `
                     <span>${qty}x Saco ${size}L (30 un.)</span>
-                    <span class="summary-item-price">${formatBRL(subtotal)}</span>
+                    <span class="summary-item-price">${formatBRL(itemSubtotal)}</span>
                 `;
                 summaryItemsEl.appendChild(item);
             });
         }
 
+        renderShippingLine();
         totalPriceEl.textContent = formatBRL(total);
         summaryToggleTotalEl.textContent = formatBRL(total);
-        return total;
+
+        const itemCount = Array.from(cart.values()).reduce((sum, qty) => sum + qty, 0);
+        if (summaryToggleCountEl) {
+            summaryToggleCountEl.hidden = itemCount === 0;
+            summaryToggleCountEl.textContent = `${itemCount} ${itemCount === 1 ? 'item' : 'itens'}`;
+        }
+
+        return { subtotal, total };
+    }
+
+    // ===== CEP: máscara + cálculo de frete por distância =====
+    function formatCep(value) {
+        const digits = value.replace(/\D/g, '').slice(0, 8);
+        return digits.length > 5 ? `${digits.slice(0, 5)}-${digits.slice(5)}` : digits;
+    }
+
+    if (cepInput) {
+        cepInput.addEventListener('input', () => {
+            cepInput.value = formatCep(cepInput.value);
+            const digits = cepInput.value.replace(/\D/g, '');
+            if (digits.length < 8) {
+                shipping = { status: 'idle', distanceKm: null, fee: 0 };
+                if (cepFeedback) {
+                    cepFeedback.textContent = '';
+                    cepFeedback.classList.remove('is-valid', 'is-pending');
+                }
+                updateSummary();
+            }
+        });
+
+        cepInput.addEventListener('blur', async () => {
+            const digits = cepInput.value.replace(/\D/g, '');
+            if (digits.length !== 8) {
+                if (digits.length > 0 && cepFeedback) {
+                    cepFeedback.textContent = 'CEP incompleto';
+                    cepFeedback.classList.remove('is-valid', 'is-pending');
+                }
+                return;
+            }
+
+            shipping = { status: 'loading', distanceKm: null, fee: 0 };
+            if (cepFeedback) {
+                cepFeedback.textContent = 'Calculando distância e frete…';
+                cepFeedback.classList.add('is-pending');
+                cepFeedback.classList.remove('is-valid');
+            }
+            updateSummary();
+
+            const result = await window.Shipping.calculate(cepInput.value);
+            // Ignora resposta se o usuário já mudou o CEP enquanto calculava
+            if (cepInput.value.replace(/\D/g, '') !== digits) return;
+
+            shipping = result;
+            updateSummary();
+
+            if (cepFeedback) {
+                cepFeedback.classList.remove('is-pending');
+                if (result.status === 'free') {
+                    cepFeedback.textContent = `✓ ${result.city || 'Endereço'}/${result.state || ''} — frete grátis`;
+                    cepFeedback.classList.add('is-valid');
+                } else if (result.status === 'paid') {
+                    cepFeedback.textContent = `✓ ${result.city || 'Endereço'}/${result.state || ''} — ${result.distanceKm.toFixed(1)} km do centro de distribuição`;
+                    cepFeedback.classList.add('is-valid');
+                } else {
+                    cepFeedback.textContent = 'Não deu para calcular a distância automaticamente — o Renato confirma o frete pelo WhatsApp.';
+                    cepFeedback.classList.remove('is-valid');
+                }
+            }
+        });
     }
 
     // ===== Seletores de quantidade nos cards de produto =====
@@ -96,11 +204,27 @@
         });
     }
 
-    // ===== Resumo do pedido: bottom sheet (mobile) =====
+    // ===== Resumo do pedido: barra fixa expansível =====
     if (summaryToggle && orderSummary) {
         summaryToggle.addEventListener('click', () => {
             const isOpen = orderSummary.classList.toggle('is-open');
             summaryToggle.setAttribute('aria-expanded', String(isOpen));
+            if (summaryToggleCta) {
+                summaryToggleCta.textContent = isOpen ? 'Fechar ✕' : 'Ver resumo ↑';
+            }
+        });
+    }
+
+    if (summaryCta) {
+        summaryCta.addEventListener('click', () => {
+            orderSummary.classList.remove('is-open');
+            summaryToggle.setAttribute('aria-expanded', 'false');
+            if (summaryToggleCta) summaryToggleCta.textContent = 'Ver resumo ↑';
+            const nameField = document.getElementById('name');
+            if (nameField) {
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setTimeout(() => nameField.focus({ preventScroll: true }), 400);
+            }
         });
     }
 
@@ -158,6 +282,17 @@
             const field = document.getElementById(id);
             if (!validateField(field)) valid = false;
         });
+
+        const cepDigits = cepInput ? cepInput.value.replace(/\D/g, '') : '';
+        const cepValid = cepDigits.length === 8;
+        if (cepInput) cepInput.classList.toggle('is-invalid', !cepValid);
+        if (!cepValid) {
+            valid = false;
+            if (cepFeedback && !cepFeedback.textContent) {
+                cepFeedback.textContent = 'Informe um CEP válido (8 dígitos).';
+            }
+        }
+
         if (cart.size === 0) valid = false;
         return valid;
     }
@@ -167,6 +302,7 @@
         try {
             const draft = {
                 name: form.name.value,
+                cep: form.cep.value,
                 address: form.address.value,
                 neighborhood: form.neighborhood.value,
                 complement: form.complement.value,
@@ -186,6 +322,9 @@
             Object.keys(draft).forEach((key) => {
                 if (form[key]) form[key].value = draft[key];
             });
+            if (cepInput && cepInput.value.replace(/\D/g, '').length === 8) {
+                cepInput.dispatchEvent(new Event('blur'));
+            }
         } catch (err) {
             /* rascunho corrompido ou indisponível — ignora */
         }
@@ -243,6 +382,12 @@
             event.preventDefault();
             formError.hidden = true;
 
+            if (shipping.status === 'loading') {
+                formError.textContent = 'Aguarde um instante — ainda estamos calculando o frete pelo CEP.';
+                formError.hidden = false;
+                return;
+            }
+
             if (!validateForm()) {
                 formError.textContent = cart.size === 0
                     ? 'Selecione pelo menos um tamanho de saco antes de enviar.'
@@ -257,6 +402,7 @@
 
             const data = {
                 name: form.name.value.trim(),
+                cep: form.cep.value.trim(),
                 address: form.address.value.trim(),
                 neighborhood: form.neighborhood.value.trim(),
                 complement: form.complement.value.trim() || 'Nenhum',
@@ -268,11 +414,11 @@
             cart.forEach((qty, size) => {
                 items.push({ size, quantity: qty, subtotal: PRICES[size] * qty });
             });
-            const total = calcTotal();
+            const { subtotal, total } = updateSummary();
 
             btnSubmit.disabled = true;
 
-            const message = window.WA.buildOrderMessage(data, items, total);
+            const message = window.WA.buildOrderMessage(data, items, subtotal, shipping, total);
             window.WA.openChat(message);
 
             vibrate([10, 20, 10]);
@@ -282,11 +428,19 @@
 
             form.reset();
             cart.clear();
+            shipping = { status: 'idle', distanceKm: null, fee: 0 };
+            if (cepFeedback) {
+                cepFeedback.textContent = '';
+                cepFeedback.classList.remove('is-valid', 'is-pending');
+            }
             document.querySelectorAll('.product-card').forEach((card) => {
                 card.classList.remove('is-selected');
                 card.querySelector('.qty-value').textContent = '0';
                 card.querySelector('.product-badge').hidden = true;
             });
+            orderSummary.classList.remove('is-open');
+            summaryToggle.setAttribute('aria-expanded', 'false');
+            if (summaryToggleCta) summaryToggleCta.textContent = 'Ver resumo ↑';
             updateSummary();
             btnSubmit.disabled = false;
         });

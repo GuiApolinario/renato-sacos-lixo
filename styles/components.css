@@ -182,6 +182,9 @@
     display: flex;
     justify-content: center;
     max-width: 380px;
+    transform: perspective(1000px) translateY(var(--parallax-y, 0px)) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform 0.15s ease-out;
+    will-change: transform;
 }
 
 .hero-bag {
@@ -310,6 +313,13 @@
     padding: var(--spacing-xl);
     box-shadow: 0 4px 20px var(--color-shadow);
     border-top: 3px solid var(--color-accent);
+    perspective: 800px;
+    transition: transform var(--transition-slow), box-shadow var(--transition-slow);
+}
+
+.about-card:hover {
+    transform: translateY(-6px) rotateX(4deg) rotateY(-4deg);
+    box-shadow: 0 24px 50px var(--color-shadow);
 }
 
 .about-card h3 {
@@ -348,6 +358,64 @@
     color: var(--color-text-light);
 }
 
+/* ===== NOSSA HISTÓRIA ===== */
+.section-title-left {
+    text-align: left;
+    margin-left: 0;
+}
+
+.section-title-left::after {
+    margin-left: 0;
+}
+
+.history-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2xl);
+    align-items: start;
+}
+
+.history-copy p {
+    margin-top: var(--spacing-md);
+    color: var(--color-text-light);
+}
+
+.history-grid {
+    display: grid;
+    gap: var(--spacing-lg);
+}
+
+.history-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    box-shadow: 0 4px 20px var(--color-shadow);
+    border-left: 3px solid var(--color-gold);
+    perspective: 800px;
+    transition: transform var(--transition-slow), box-shadow var(--transition-slow);
+}
+
+.history-card:hover {
+    transform: translateX(4px) rotateY(-3deg);
+    box-shadow: 0 16px 36px var(--color-shadow);
+}
+
+.history-card-label {
+    display: block;
+    font-family: var(--font-secondary);
+    font-weight: 700;
+    color: var(--color-accent-dark);
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--spacing-xs);
+}
+
+.history-card p {
+    color: var(--color-text);
+    font-size: 0.95rem;
+}
+
 /* ===== POR QUE ESCOLHER ===== */
 .why-grid {
     display: grid;
@@ -361,11 +429,12 @@
     padding: var(--spacing-xl);
     text-align: center;
     box-shadow: 0 4px 20px var(--color-shadow);
-    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    perspective: 800px;
+    transition: transform var(--transition-slow), box-shadow var(--transition-slow);
 }
 
 .why-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-8px) rotateX(5deg) rotateY(5deg);
     box-shadow: 0 20px 50px var(--color-shadow);
 }
 
@@ -506,11 +575,7 @@
 
 /* ===== CHECKOUT ===== */
 .checkout-layout {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: var(--spacing-2xl);
-    align-items: start;
-    max-width: 1100px;
+    max-width: 720px;
     margin: 0 auto;
 }
 
@@ -640,28 +705,78 @@
     margin-bottom: var(--spacing-md);
 }
 
-/* ===== RESUMO DO PEDIDO ===== */
+/* ===== RESUMO DO PEDIDO (barra fixa global) ===== */
+/* Fica visível em qualquer scroll — resolve o pedido do cliente de ver
+   quantidade e total na mesma tela, sem precisar rolar até o formulário. */
 .order-summary {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-header);
+    max-width: 720px;
+    margin: 0 auto;
     background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 4px 24px var(--color-shadow);
-    position: sticky;
-    top: calc(var(--header-height) + var(--spacing-md));
-    overflow: hidden;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: 0 -8px 30px var(--color-shadow);
+    display: flex;
+    flex-direction: column;
+    max-height: 75vh;
 }
 
 .summary-toggle {
-    display: none;
+    display: flex;
     width: 100%;
     justify-content: space-between;
     align-items: center;
+    gap: var(--spacing-md);
     padding: var(--spacing-md) var(--spacing-lg);
     font-weight: 700;
     color: var(--color-primary);
+    min-height: 64px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .summary-toggle { color: var(--color-text-white); }
+}
+
+.summary-toggle-info {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-sm);
+}
+
+.summary-toggle-count {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+    background: var(--color-bg);
+    padding: 2px 10px;
+    border-radius: 999px;
+}
+
+.summary-toggle-total {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+}
+
+.summary-toggle-cta {
+    background: var(--color-accent);
+    color: var(--color-text-white);
+    font-size: 0.85rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+}
+
+.order-summary:not(.is-open) .order-summary-body {
+    display: none;
 }
 
 .order-summary-body {
-    padding: var(--spacing-xl);
+    padding: var(--spacing-lg) var(--spacing-xl) var(--spacing-xl);
+    overflow-y: auto;
+    border-top: 1px solid var(--color-border);
 }
 
 .order-summary-body h3 {
@@ -712,6 +827,27 @@
     color: var(--color-accent-dark);
 }
 
+.summary-shipping strong.shipping-value--pending {
+    color: var(--color-text-light);
+    font-weight: 500;
+}
+
+.summary-shipping strong.shipping-value--paid {
+    color: var(--color-primary);
+}
+
+@media (prefers-color-scheme: dark) {
+    .summary-shipping strong.shipping-value--paid { color: var(--color-text-white); }
+}
+
+.summary-shipping strong.shipping-value--unknown {
+    color: var(--color-gold);
+}
+
+.field-feedback.is-pending {
+    color: var(--color-text-light);
+}
+
 .summary-total {
     display: flex;
     justify-content: space-between;
@@ -723,6 +859,12 @@
     font-family: var(--font-mono);
     font-size: 1.5rem;
     color: var(--color-primary);
+}
+
+.summary-cta {
+    width: 100%;
+    justify-content: center;
+    margin-top: var(--spacing-lg);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -835,7 +977,7 @@
 /* ===== WHATSAPP FAB ===== */
 .whatsapp-fab {
     position: fixed;
-    bottom: var(--spacing-lg);
+    bottom: calc(64px + var(--spacing-md));
     right: var(--spacing-lg);
     width: 56px;
     height: 56px;

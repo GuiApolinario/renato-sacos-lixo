@@ -1,15 +1,15 @@
-// scripts/background-3d.js — animação de fundo 3D (campo de partículas em profundidade)
+// scripts/background-3d.js — animação de fundo 3D (pétalas verdes em profundidade)
 //
 // Renderiza, num <canvas> fixo atrás de todo o conteúdo, um campo de
-// partículas distribuídas num volume 3D. As partículas se movem em direção
-// à câmera (eixo Z), crescendo e ganhando nitidez conforme se aproximam —
-// o clássico efeito "voando pelo espaço", que dá uma sensação real de
-// profundidade sem depender de nenhuma biblioteca externa.
+// pétalas/folhas distribuídas num volume 3D. Elas se movem em direção à
+// câmera (eixo Z, projeção em perspectiva real) girando suavemente sobre
+// si mesmas e balançando de leve, como folhas boiando no ar — dá uma
+// sensação de profundidade real sem depender de nenhuma biblioteca externa.
 //
 // Cuidados de produto:
-// - Opacidade baixa e cores da marca: decora sem competir com o texto.
+// - Opacidade baixa e tons de verde da marca: decora sem competir com o texto.
 // - Projeção em perspectiva de verdade (foco/Z), não é só parallax 2D.
-// - Leve: número de partículas reduzido no mobile, DPR limitado a 2,
+// - Leve: número de pétalas reduzido no mobile, DPR limitado a 2,
 //   pausa quando a aba fica em segundo plano.
 // - Acessível: respeita prefers-reduced-motion (mostra um quadro estático).
 
@@ -22,44 +22,49 @@
     const ctx = canvas.getContext('2d');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Paleta da marca (mais verdes, um toque de ouro pontual)
-    const PALETTE = ['#10B981', '#0D3B3D', '#1A4F52', '#A7F3D0', '#D4AF37'];
-    const GOLD_INDEX = 4;
+    // Tons de verde da marca (do petróleo escuro ao menta claro)
+    const PALETTE = ['#10B981', '#059669', '#1A4F52', '#0D3B3D', '#A7F3D0'];
 
     const FOCAL = 320;      // distância focal (perspectiva)
     const DEPTH = 900;      // profundidade máxima do volume
-    const NEAR = 60;        // plano mais próximo (evita partículas gigantes)
+    const NEAR = 60;        // plano mais próximo (evita pétalas gigantes)
 
     let width = 0;
     let height = 0;
     let dpr = 1;
-    let particles = [];
+    let petals = [];
     let mouseX = 0;
     let mouseY = 0;
     let targetMouseX = 0;
     let targetMouseY = 0;
     let rafId = null;
+    let elapsed = 0;
 
-    function particleCount() {
+    function petalCount() {
         const area = window.innerWidth * window.innerHeight;
-        // ~1 partícula a cada 22k px², limitada para não pesar
-        const base = Math.round(area / 22000);
+        // ~1 pétala a cada 26k px², limitada para não pesar
+        const base = Math.round(area / 26000);
         const isSmall = window.innerWidth < 768;
-        return Math.max(24, Math.min(base, isSmall ? 46 : 90));
+        return Math.max(20, Math.min(base, isSmall ? 38 : 76));
     }
 
-    function makeParticle(randomZ) {
-        // x,y em torno da origem; z entre NEAR e DEPTH
+    function makePetal(randomZ) {
         const spread = Math.max(width, height) * 1.1;
         return {
             x: (Math.random() - 0.5) * spread,
             y: (Math.random() - 0.5) * spread,
             z: randomZ ? NEAR + Math.random() * (DEPTH - NEAR) : DEPTH,
-            radius: 6 + Math.random() * 16,
+            size: 10 + Math.random() * 15,
             color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
-            speed: 0.4 + Math.random() * 0.9,
-            driftX: (Math.random() - 0.5) * 0.25,
-            driftY: (Math.random() - 0.5) * 0.25,
+            speed: 0.35 + Math.random() * 0.8,
+            driftX: (Math.random() - 0.5) * 0.2,
+            driftY: (Math.random() - 0.5) * 0.15,
+            rotation: Math.random() * Math.PI * 2,
+            rotationSpeed: (Math.random() - 0.5) * 0.012,
+            swayAmp: 0.4 + Math.random() * 0.5,
+            swayFreq: 0.4 + Math.random() * 0.6,
+            swayPhase: Math.random() * Math.PI * 2,
+            curl: 0.55 + Math.random() * 0.35, // o quanto a pétala é "gorda" (largura relativa)
         };
     }
 
@@ -73,41 +78,54 @@
         canvas.style.height = height + 'px';
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        const target = particleCount();
-        particles = [];
+        const target = petalCount();
+        petals = [];
         for (let i = 0; i < target; i += 1) {
-            particles.push(makeParticle(true));
+            petals.push(makePetal(true));
         }
     }
 
-    function drawParticle(p) {
+    // Desenha uma pétala/folha: duas curvas em ogiva se encontrando numa
+    // ponta, com uma nervura central — lê como folha em qualquer tamanho.
+    function drawPetal(p) {
         const scale = FOCAL / p.z;
-        // Parallax de câmera: o mouse desloca sutilmente o ponto de fuga
         const camX = mouseX * 0.04;
         const camY = mouseY * 0.04;
-        const sx = width / 2 + (p.x - camX * p.z * 0.06) * scale;
+        const sway = Math.sin(elapsed * p.swayFreq + p.swayPhase) * p.swayAmp * scale * 14;
+        const sx = width / 2 + (p.x - camX * p.z * 0.06) * scale + sway;
         const sy = height / 2 + (p.y - camY * p.z * 0.06) * scale;
-        const r = p.radius * scale;
+        const r = p.size * scale;
 
-        if (sx < -r || sx > width + r || sy < -r || sy > height + r) return;
+        if (sx < -r * 2 || sx > width + r * 2 || sy < -r * 2 || sy > height + r * 2) return;
 
-        // Alpha: fade-in quando distante, leve fade-out ao passar muito perto
-        const depthFade = 1 - p.z / DEPTH;            // perto = mais forte
-        const nearFade = Math.min(1, (p.z - NEAR) / 160); // some ao "atravessar"
-        const isGold = p.color === PALETTE[GOLD_INDEX];
-        const maxAlpha = isGold ? 0.35 : 0.5;
+        const depthFade = 1 - p.z / DEPTH;
+        const nearFade = Math.min(1, (p.z - NEAR) / 160);
+        const maxAlpha = 0.55;
         const alpha = Math.max(0, Math.min(maxAlpha, depthFade * nearFade * maxAlpha));
         if (alpha <= 0.01) return;
 
-        const gradient = ctx.createRadialGradient(sx, sy, 0, sx, sy, r);
-        gradient.addColorStop(0, hexToRgba(p.color, alpha));
-        gradient.addColorStop(0.6, hexToRgba(p.color, alpha * 0.35));
-        gradient.addColorStop(1, hexToRgba(p.color, 0));
+        const width2 = r * p.curl;
 
-        ctx.fillStyle = gradient;
+        ctx.save();
+        ctx.translate(sx, sy);
+        ctx.rotate(p.rotation);
+        ctx.fillStyle = hexToRgba(p.color, alpha);
         ctx.beginPath();
-        ctx.arc(sx, sy, r, 0, Math.PI * 2);
+        ctx.moveTo(0, -r);
+        ctx.bezierCurveTo(width2, -r * 0.4, width2, r * 0.4, 0, r);
+        ctx.bezierCurveTo(-width2, r * 0.4, -width2, -r * 0.4, 0, -r);
+        ctx.closePath();
         ctx.fill();
+
+        // nervura central, sutil
+        ctx.strokeStyle = hexToRgba(p.color, Math.min(0.9, alpha + 0.15));
+        ctx.lineWidth = Math.max(0.6, r * 0.05);
+        ctx.beginPath();
+        ctx.moveTo(0, -r * 0.85);
+        ctx.lineTo(0, r * 0.85);
+        ctx.stroke();
+
+        ctx.restore();
     }
 
     function hexToRgba(hex, alpha) {
@@ -118,24 +136,25 @@
         return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }
 
-    function frame() {
+    function frame(timestamp) {
+        elapsed = timestamp / 1000;
         ctx.clearRect(0, 0, width, height);
 
-        // suaviza o parallax do mouse
         mouseX += (targetMouseX - mouseX) * 0.05;
         mouseY += (targetMouseY - mouseY) * 0.05;
 
-        for (let i = 0; i < particles.length; i += 1) {
-            const p = particles[i];
+        for (let i = 0; i < petals.length; i += 1) {
+            const p = petals[i];
             p.z -= p.speed;
             p.x += p.driftX;
             p.y += p.driftY;
+            p.rotation += p.rotationSpeed;
 
             if (p.z <= NEAR) {
-                particles[i] = makeParticle(false); // recicla lá no fundo
+                petals[i] = makePetal(false); // recicla lá no fundo
                 continue;
             }
-            drawParticle(p);
+            drawPetal(p);
         }
 
         rafId = requestAnimationFrame(frame);
@@ -143,7 +162,7 @@
 
     function renderStaticFrame() {
         ctx.clearRect(0, 0, width, height);
-        particles.forEach(drawParticle);
+        petals.forEach(drawPetal);
     }
 
     function start() {

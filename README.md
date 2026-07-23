@@ -24,7 +24,7 @@ renato-sacos-lixo/
 │   └── responsive.css     # media queries (mobile-first)
 ├── scripts/
 │   ├── preloader.js              # tela de carregamento com a marca
-│   ├── background-3d.js          # animação de fundo 3D (campo de partículas em Canvas)
+│   ├── background-3d.js          # fundo 3D com pétalas verdes flutuando (Canvas)
 │   ├── main.js                   # inicialização e navegação
 │   ├── form-handler.js           # carrinho, validação e checkout
 │   ├── shipping.js               # frete por distância (CEP → BrasilAPI → Haversine)

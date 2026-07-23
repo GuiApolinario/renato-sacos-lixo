@@ -1,5 +1,10 @@
 /* styles/animations.css — keyframes e transições */
 
+@keyframes wave-scroll {
+    from { background-position-x: 0; }
+    to { background-position-x: 200px; }
+}
+
 @keyframes preloader-breathe {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }

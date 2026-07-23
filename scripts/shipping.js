@@ -1,19 +1,21 @@
-// scripts/shipping.js — busca de CEP + cálculo de frete por distância (BrasilAPI + Haversine)
+// scripts/shipping.js — busca de CEP (endereço) + cálculo de frete por distância
 //
-// A consulta ao CEP na BrasilAPI (pública e gratuita) devolve, numa única
-// requisição, tanto o endereço (rua, bairro, cidade, estado) quanto as
-// coordenadas. Usamos os dois:
-//   - endereço → preenche automaticamente os campos do formulário;
-//   - coordenadas → calculam a distância até a origem (frete).
+// Estratégia de dupla fonte, para máxima confiabilidade:
+//   - ViaCEP  → endereço (rua, bairro, cidade, estado). É o serviço de CEP
+//               mais consolidado e estável do Brasil, gratuito e sem chave.
+//               É a fonte PRINCIPAL do preenchimento automático.
+//   - BrasilAPI → coordenadas (latitude/longitude), usadas só para calcular a
+//               distância até a origem (frete). Também traz endereço, usado
+//               como reserva caso o ViaCEP falhe.
+//
+// As duas consultas rodam em paralelo e falham de forma independente: se a
+// BrasilAPI cair, o endereço ainda é preenchido pelo ViaCEP (o frete só fica
+// "a combinar"); se o ViaCEP cair, o endereço vem da BrasilAPI.
 //
 // Regra de negócio: frete grátis em até 15km do CEP de origem (18117-131).
-// Além disso, cobra-se RATE_PER_KM por km excedente. RATE_PER_KM é uma
+// Acima disso, cobra-se RATE_PER_KM por km excedente. RATE_PER_KM é uma
 // estimativa de mercado para entrega local (motoboy/courier) no interior de
 // SP — não é cotação em tempo real. Ajuste com o Renato quando o custo mudar.
-//
-// Nem todo CEP tem coordenadas cadastradas: quando a distância não pode ser
-// calculada, o status vira 'unknown' e o frete fica "a combinar" (o endereço
-// ainda pode ter vindo preenchido, mesmo sem coordenadas).
 
 window.Shipping = (function () {
     'use strict';
@@ -21,7 +23,8 @@ window.Shipping = (function () {
     const ORIGIN_CEP = '18117131';
     const FREE_RADIUS_KM = 15;
     const RATE_PER_KM = 2.00;
-    const API_BASE = 'https://brasilapi.com.br/api/cep/v2/';
+    const VIACEP_BASE = 'https://viacep.com.br/ws/';
+    const BRASILAPI_BASE = 'https://brasilapi.com.br/api/cep/v2/';
 
     let originPromise = null;
 
@@ -29,20 +32,30 @@ window.Shipping = (function () {
         return (value || '').replace(/\D/g, '');
     }
 
-    // Consulta o CEP e devolve endereço + coordenadas (coords podem ser null).
-    // Retorna null apenas quando o CEP é inválido ou a consulta falha.
-    async function fetchCep(cep) {
-        const digits = onlyDigits(cep);
-        if (digits.length !== 8) return null;
-
-        const response = await fetch(API_BASE + digits);
+    // ViaCEP: endereço confiável, sem coordenadas.
+    async function fetchViaCep(digits) {
+        const response = await fetch(`${VIACEP_BASE}${digits}/json/`);
         if (!response.ok) return null;
+        const data = await response.json();
+        if (!data || data.erro) return null;
+        return {
+            street: data.logradouro || '',
+            neighborhood: data.bairro || '',
+            city: data.localidade || '',
+            state: data.uf || '',
+            lat: null,
+            lng: null,
+        };
+    }
 
+    // BrasilAPI: endereço + coordenadas (as coordenadas podem vir vazias).
+    async function fetchBrasilApi(digits) {
+        const response = await fetch(`${BRASILAPI_BASE}${digits}`);
+        if (!response.ok) return null;
         const data = await response.json();
         const coords = (data && data.location && data.location.coordinates) || {};
         const lat = parseFloat(coords.latitude);
         const lng = parseFloat(coords.longitude);
-
         return {
             street: data.street || '',
             neighborhood: data.neighborhood || '',
@@ -53,9 +66,34 @@ window.Shipping = (function () {
         };
     }
 
+    // Consulta as duas fontes em paralelo e mescla: endereço prioriza ViaCEP,
+    // coordenadas vêm da BrasilAPI. Retorna null só se ambas falharem.
+    async function lookup(cep) {
+        const digits = onlyDigits(cep);
+        if (digits.length !== 8) return null;
+
+        const [viaResult, brasilResult] = await Promise.allSettled([
+            fetchViaCep(digits),
+            fetchBrasilApi(digits),
+        ]);
+
+        const via = viaResult.status === 'fulfilled' ? viaResult.value : null;
+        const brasil = brasilResult.status === 'fulfilled' ? brasilResult.value : null;
+        if (!via && !brasil) return null;
+
+        return {
+            street: (via && via.street) || (brasil && brasil.street) || '',
+            neighborhood: (via && via.neighborhood) || (brasil && brasil.neighborhood) || '',
+            city: (via && via.city) || (brasil && brasil.city) || '',
+            state: (via && via.state) || (brasil && brasil.state) || '',
+            lat: brasil ? brasil.lat : null,
+            lng: brasil ? brasil.lng : null,
+        };
+    }
+
     function getOrigin() {
         if (!originPromise) {
-            originPromise = fetchCep(ORIGIN_CEP);
+            originPromise = lookup(ORIGIN_CEP);
         }
         return originPromise;
     }
@@ -79,7 +117,7 @@ window.Shipping = (function () {
         try {
             const [origin, destination] = await Promise.all([
                 getOrigin(),
-                fetchCep(destinationCep),
+                lookup(destinationCep),
             ]);
 
             if (!destination) {

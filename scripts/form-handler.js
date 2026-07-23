@@ -116,60 +116,79 @@
         return digits.length > 5 ? `${digits.slice(0, 5)}-${digits.slice(5)}` : digits;
     }
 
+    // Guarda o último CEP já consultado para não repetir a mesma busca.
+    let lastResolvedCep = '';
+
+    async function resolveCep() {
+        const digits = cepInput.value.replace(/\D/g, '');
+        if (digits.length !== 8) {
+            if (digits.length > 0 && cepFeedback) {
+                cepFeedback.textContent = 'CEP incompleto';
+                cepFeedback.classList.remove('is-valid', 'is-pending');
+            }
+            return;
+        }
+
+        if (digits === lastResolvedCep) return; // já resolvido, evita busca dupla
+        lastResolvedCep = digits;
+
+        shipping = { status: 'loading', distanceKm: null, fee: 0 };
+        if (cepFeedback) {
+            cepFeedback.textContent = 'Buscando endereço e calculando frete…';
+            cepFeedback.classList.add('is-pending');
+            cepFeedback.classList.remove('is-valid');
+        }
+        updateSummary();
+
+        const result = await window.Shipping.calculate(cepInput.value);
+        // Ignora a resposta se o usuário já mudou o CEP enquanto buscava
+        if (cepInput.value.replace(/\D/g, '') !== digits) return;
+
+        shipping = result;
+        updateSummary();
+        autofillAddress(result.address);
+
+        if (cepFeedback) {
+            cepFeedback.classList.remove('is-pending');
+            if (result.status === 'free') {
+                cepFeedback.textContent = `✓ ${result.city || 'Endereço'}/${result.state || ''} — frete grátis`;
+                cepFeedback.classList.add('is-valid');
+            } else if (result.status === 'paid') {
+                cepFeedback.textContent = `✓ ${result.city || 'Endereço'}/${result.state || ''} — ${result.distanceKm.toFixed(1)} km do centro de distribuição`;
+                cepFeedback.classList.add('is-valid');
+            } else if (result.address && (result.address.street || result.address.city)) {
+                // Endereço veio, mas sem coordenadas para o frete
+                cepFeedback.textContent = `✓ ${result.city || 'Endereço encontrado'}/${result.state || ''} — frete a combinar pelo WhatsApp`;
+                cepFeedback.classList.remove('is-valid');
+            } else {
+                cepFeedback.textContent = 'CEP não encontrado. Confira o número ou preencha o endereço manualmente.';
+                cepFeedback.classList.remove('is-valid');
+                lastResolvedCep = ''; // permite tentar de novo
+            }
+        }
+    }
+
     if (cepInput) {
         cepInput.addEventListener('input', () => {
             cepInput.value = formatCep(cepInput.value);
             const digits = cepInput.value.replace(/\D/g, '');
+
             if (digits.length < 8) {
+                lastResolvedCep = '';
                 shipping = { status: 'idle', distanceKm: null, fee: 0 };
                 if (cepFeedback) {
                     cepFeedback.textContent = '';
                     cepFeedback.classList.remove('is-valid', 'is-pending');
                 }
                 updateSummary();
+            } else if (digits.length === 8) {
+                // Dispara assim que o CEP completa — mais confiável no celular
+                // do que depender do blur.
+                resolveCep();
             }
         });
 
-        cepInput.addEventListener('blur', async () => {
-            const digits = cepInput.value.replace(/\D/g, '');
-            if (digits.length !== 8) {
-                if (digits.length > 0 && cepFeedback) {
-                    cepFeedback.textContent = 'CEP incompleto';
-                    cepFeedback.classList.remove('is-valid', 'is-pending');
-                }
-                return;
-            }
-
-            shipping = { status: 'loading', distanceKm: null, fee: 0 };
-            if (cepFeedback) {
-                cepFeedback.textContent = 'Calculando distância e frete…';
-                cepFeedback.classList.add('is-pending');
-                cepFeedback.classList.remove('is-valid');
-            }
-            updateSummary();
-
-            const result = await window.Shipping.calculate(cepInput.value);
-            // Ignora resposta se o usuário já mudou o CEP enquanto calculava
-            if (cepInput.value.replace(/\D/g, '') !== digits) return;
-
-            shipping = result;
-            updateSummary();
-            autofillAddress(result.address);
-
-            if (cepFeedback) {
-                cepFeedback.classList.remove('is-pending');
-                if (result.status === 'free') {
-                    cepFeedback.textContent = `✓ ${result.city || 'Endereço'}/${result.state || ''} — frete grátis`;
-                    cepFeedback.classList.add('is-valid');
-                } else if (result.status === 'paid') {
-                    cepFeedback.textContent = `✓ ${result.city || 'Endereço'}/${result.state || ''} — ${result.distanceKm.toFixed(1)} km do centro de distribuição`;
-                    cepFeedback.classList.add('is-valid');
-                } else {
-                    cepFeedback.textContent = 'Não deu para calcular a distância automaticamente — o Renato confirma o frete pelo WhatsApp.';
-                    cepFeedback.classList.remove('is-valid');
-                }
-            }
-        });
+        cepInput.addEventListener('blur', resolveCep);
     }
 
     // Preenche rua e bairro a partir do endereço retornado pelo CEP.

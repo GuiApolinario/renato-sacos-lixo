@@ -52,15 +52,23 @@ python3 -m http.server 8000
 - **Preços:** 20L R$28 · 40L R$32 · 60L R$38 · 100L R$48 (30 unidades/pacote)
 - **Prazo:** 24-48h
 
-## Frete por distância (`scripts/shipping.js`)
+## Busca de CEP e frete por distância (`scripts/shipping.js`)
 
-O frete é calculado automaticamente a partir do CEP que o cliente digita no checkout:
+Quando o cliente digita o CEP no checkout (a busca dispara ao completar 8 dígitos), o site preenche o endereço automaticamente e calcula o frete, usando **duas fontes gratuitas em paralelo** para máxima confiabilidade:
 
-1. O CEP de origem (`ORIGIN_CEP = '18117131'`) e o CEP do cliente são geocodificados via [BrasilAPI](https://brasilapi.com.br/) (pública, gratuita, sem chave de API).
-2. A distância é calculada em linha reta (fórmula de Haversine) — não é rota real de entrega, é uma estimativa.
-3. **Até 15km (`FREE_RADIUS_KM`): frete grátis.** Acima disso, cobra-se `RATE_PER_KM` por km excedente.
-4. `RATE_PER_KM = 2.00` é uma **estimativa de mercado para entrega local (motoboy/courier) no interior de SP — não é uma cotação em tempo real.** Ajuste esse valor em `scripts/shipping.js` sempre que o custo real de entrega do Renato mudar.
-5. Nem todo CEP tem coordenadas cadastradas na BrasilAPI. Quando a distância não pode ser calculada, o frete aparece como **"a combinar"** e o pedido é enviado normalmente — o Renato confirma o valor manualmente pelo WhatsApp.
+- **[ViaCEP](https://viacep.com.br/)** — fonte principal do endereço (rua, bairro, cidade, estado). É o serviço de CEP mais estável do Brasil, sem chave de API.
+- **[BrasilAPI](https://brasilapi.com.br/)** — fornece as coordenadas (latitude/longitude) para o cálculo de distância; também serve de reserva para o endereço.
+
+As duas consultas falham de forma independente: se a BrasilAPI cair, o endereço ainda é preenchido pelo ViaCEP (o frete fica "a combinar"); se o ViaCEP cair, o endereço vem da BrasilAPI.
+
+> **Por que não Google Maps?** A API de geocodificação do Google exige chave de API com cobrança (cartão no Google Cloud) e a chave ficaria exposta no código do site. ViaCEP + BrasilAPI resolvem o mesmo problema de graça e sem esse risco.
+
+Cálculo do frete:
+
+1. A distância é em linha reta (fórmula de Haversine) — estimativa, não rota real.
+2. **Até 15km (`FREE_RADIUS_KM`): frete grátis.** Acima disso, `RATE_PER_KM` por km excedente.
+3. `RATE_PER_KM = 2.00` é uma **estimativa de mercado para entrega local no interior de SP** — ajuste em `scripts/shipping.js` conforme o custo real do Renato.
+4. Quando a distância não pode ser calculada (CEP sem coordenadas), o frete aparece como **"a combinar"** e o Renato confirma o valor pelo WhatsApp.
 
 ## Deploy
 

@@ -1,0 +1,138 @@
+/* styles/animations.css — keyframes e transições */
+
+@keyframes logo-breath {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+@keyframes hero-bag-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(2deg); }
+}
+
+@keyframes hero-shadow-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(0.85); opacity: 0.35; }
+}
+
+@keyframes word-reveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-headline .word:nth-child(1) { animation-delay: 0.05s; }
+.hero-headline .word:nth-child(2) { animation-delay: 0.15s; }
+.hero-headline .word:nth-child(3) { animation-delay: 0.3s; }
+.hero-headline .word:nth-child(4) { animation-delay: 0.4s; }
+.hero-headline .word:nth-child(5) { animation-delay: 0.55s; }
+.hero-headline .word:nth-child(6) { animation-delay: 0.65s; }
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modal-pop {
+    from { opacity: 0; transform: scale(0.85) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes item-in {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+}
+
+.shake {
+    animation: shake 0.4s ease;
+}
+
+@keyframes stamp {
+    0% { transform: scale(0.5) rotate(-15deg); opacity: 0; }
+    60% { transform: scale(1.15) rotate(5deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+.field-feedback.is-valid {
+    animation: stamp 0.35s ease;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55);
+    transform: scale(0);
+    animation: ripple 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(120px) rotate(220deg);
+        opacity: 0;
+    }
+}
+
+.confetti-piece {
+    position: fixed;
+    top: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    animation: confetti-fall 1.8s ease-in forwards;
+    z-index: var(--z-tooltip);
+    pointer-events: none;
+}
+
+/* Scroll reveal (controlado via JS adicionando .is-visible) */
+.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.about-grid .reveal:nth-child(2) { transition-delay: 0.1s; }
+.about-grid .reveal:nth-child(3) { transition-delay: 0.2s; }
+
+.why-grid .reveal:nth-child(2) { transition-delay: 0.1s; }
+.why-grid .reveal:nth-child(3) { transition-delay: 0.2s; }
+
+.products-grid .reveal:nth-child(2) { transition-delay: 0.1s; }
+.products-grid .reveal:nth-child(3) { transition-delay: 0.2s; }
+.products-grid .reveal:nth-child(4) { transition-delay: 0.3s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+    }
+    .hero-headline .word {
+        opacity: 1;
+        transform: none;
+    }
+}

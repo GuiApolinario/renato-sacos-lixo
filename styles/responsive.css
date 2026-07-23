@@ -1,0 +1,175 @@
+/* styles/responsive.css — mobile-first breakpoints (320 / 375 / 768 / 1024) */
+
+/* ===== TABLET E ABAIXO (<= 1024px) ===== */
+@media (max-width: 1024px) {
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .order-summary {
+        position: static;
+        order: -1;
+    }
+
+    .hero {
+        min-height: auto;
+        padding-top: var(--spacing-xl);
+        padding-bottom: var(--spacing-2xl);
+    }
+}
+
+/* ===== MOBILE (<= 768px) ===== */
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: min(78vw, 320px);
+        flex-direction: column;
+        justify-content: center;
+        gap: var(--spacing-2xl);
+        background: var(--color-surface);
+        box-shadow: 4px 0 40px rgba(0, 0, 0, 0.15);
+        padding: var(--spacing-2xl);
+        transform: translateX(-100%);
+        transition: transform var(--transition-normal);
+        z-index: var(--z-header);
+    }
+
+    .nav-menu.is-open {
+        transform: translateX(0);
+    }
+
+    .nav-link {
+        font-size: 1.2rem;
+    }
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .hero-headline {
+        justify-content: center;
+    }
+
+    .hero-subheadline {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-trust {
+        justify-content: center;
+    }
+
+    .hero-3d {
+        order: -1;
+        max-width: 220px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .checkout-form {
+        padding: var(--spacing-xl) var(--spacing-lg);
+    }
+
+    /* Resumo do pedido vira bottom sheet */
+    .order-summary {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        z-index: var(--z-header);
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .summary-toggle {
+        display: flex;
+    }
+
+    .order-summary-body {
+        display: none;
+        overflow-y: auto;
+    }
+
+    .order-summary.is-open .order-summary-body {
+        display: block;
+    }
+
+    .checkout {
+        padding-bottom: 110px;
+    }
+
+    .whatsapp-fab {
+        bottom: 90px;
+    }
+}
+
+/* ===== MOBILE PEQUENO (<= 480px) ===== */
+@media (max-width: 480px) {
+    .container,
+    .hero,
+    .checkout {
+        padding-left: var(--spacing-md);
+        padding-right: var(--spacing-md);
+    }
+
+    .header-badge {
+        gap: var(--spacing-sm);
+        font-size: 0.72rem;
+    }
+
+    .cta-primary,
+    .btn-primary {
+        width: 100%;
+        padding: var(--spacing-md) var(--spacing-xl);
+    }
+
+    .about-card,
+    .why-card,
+    .product-card {
+        padding: var(--spacing-lg);
+    }
+
+    .vision-banner {
+        padding: var(--spacing-xl) var(--spacing-lg);
+    }
+}
+
+/* Garantir alvo de toque mínimo em qualquer largura */
+button,
+.nav-link,
+input[type="checkbox"],
+input[type="radio"] {
+    min-height: 44px;
+}
+
+.qty-btn,
+.hamburger,
+.whatsapp-fab {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* ===== DESKTOP GRANDE (>= 1440px) ===== */
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1320px;
+    }
+}

@@ -47,7 +47,7 @@ python3 -m http.server 8000
 ## Dados de negócio (editar em `scripts/form-handler.js` e `scripts/whatsapp-integration.js`)
 
 - **WhatsApp:** `5515997742737`
-- **Chave PIX:** placeholder `00000000000000` — **substituir pela chave real do Renato antes de publicar**
+- **Chave PIX:** `+5515997742737` (chave do tipo telefone, mesmo número do WhatsApp)
 - **Preços:** 20L R$28 · 40L R$32 · 60L R$38 · 100L R$48 (30 unidades/pacote)
 - **Prazo:** 24-48h
 
@@ -73,7 +73,6 @@ git push origin main
 
 ## Pendências para o cliente
 
-- [ ] Substituir a chave PIX placeholder pela chave real
 - [ ] Adicionar fotos reais de produto/entrega em `assets/images/`
 - [ ] Adicionar depoimentos reais de clientes (quando disponíveis)
 - [ ] Revisar o texto da seção "Nossa História" (`#history` em `index.html`) — hoje é um texto genérico baseado no brief; substituir por detalhes reais (ano de fundação, como começou, marcos importantes)

@@ -4,7 +4,7 @@
     'use strict';
 
     const PRICES = { 20: 28.00, 40: 32.00, 60: 38.00, 100: 48.00 };
-    const PIX_KEY = '00000000000000';
+    const PIX_KEY = '+5515997742737';
     const STORAGE_KEY = 'renato-sacos-checkout-draft';
 
     const cart = new Map(); // size -> quantity

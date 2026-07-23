@@ -1,5 +1,15 @@
 /* styles/animations.css — keyframes e transições */
 
+@keyframes preloader-breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes preloader-slide {
+    0% { left: -40%; }
+    100% { left: 100%; }
+}
+
 @keyframes logo-breath {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.08); }

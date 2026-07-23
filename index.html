@@ -44,6 +44,14 @@
     </script>
 </head>
 <body>
+    <div id="preloader" class="preloader" role="presentation" aria-hidden="true">
+        <div class="preloader-content">
+            <img src="./assets/images/renato-fundador.webp" alt="" width="120" height="120" class="preloader-photo">
+            <p class="preloader-label">Renato Sacos para Lixo</p>
+            <span class="preloader-bar"></span>
+        </div>
+    </div>
+
     <canvas id="bg-canvas" aria-hidden="true"></canvas>
     <a class="skip-link" href="#main">Pular para o conteúdo</a>
 
@@ -436,7 +444,13 @@
             </div>
 
             <div class="footer-section reveal">
-                <h3>Contato</h3>
+                <div class="founder-card">
+                    <img src="./assets/images/renato-fundador.webp" alt="Renato, fundador da Renato Sacos para Lixo" width="72" height="72" class="founder-photo" loading="lazy">
+                    <div>
+                        <h3>Renato</h3>
+                        <p class="founder-role">Fundador</p>
+                    </div>
+                </div>
                 <p>📍 Sorocaba, SP</p>
                 <p>📱 <a href="https://wa.me/5515997742737" target="_blank" rel="noopener">WhatsApp: (15) 99774-2737</a></p>
             </div>
@@ -458,6 +472,7 @@
         <svg viewBox="0 0 32 32" width="26" height="26"><path fill="currentColor" d="M16 3C9 3 3 8.6 3 15.4c0 3.5 1.6 6.6 4.2 8.8L6 29l5.1-1.6c1.5.5 3.1.8 4.9.8 7 0 13-5.6 13-12.4S23 3 16 3z"/></svg>
     </button>
 
+    <script src="./scripts/preloader.js" defer></script>
     <script src="./scripts/background-3d.js" defer></script>
     <script src="./scripts/main.js" defer></script>
     <script src="./scripts/whatsapp-integration.js" defer></script>

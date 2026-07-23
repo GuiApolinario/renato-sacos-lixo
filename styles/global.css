@@ -52,6 +52,7 @@
     --z-fab: 150;
     --z-modal: 200;
     --z-tooltip: 300;
+    --z-preloader: 400;
 }
 
 @media (prefers-color-scheme: dark) {

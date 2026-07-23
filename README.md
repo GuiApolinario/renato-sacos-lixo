@@ -23,6 +23,7 @@ renato-sacos-lixo/
 │   ├── animations.css     # keyframes e transições
 │   └── responsive.css     # media queries (mobile-first)
 ├── scripts/
+│   ├── preloader.js              # tela de carregamento com a marca
 │   ├── background-3d.js          # animação de fundo 3D (campo de partículas em Canvas)
 │   ├── main.js                   # inicialização e navegação
 │   ├── form-handler.js           # carrinho, validação e checkout
@@ -33,6 +34,7 @@ renato-sacos-lixo/
     ├── logo.svg
     ├── icons/
     ├── images/
+    │   └── renato-fundador.webp  # foto/caricatura do Renato (contato + tela de carregamento)
     └── videos/
 ```
 

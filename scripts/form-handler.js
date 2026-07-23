@@ -154,6 +154,7 @@
 
             shipping = result;
             updateSummary();
+            autofillAddress(result.address);
 
             if (cepFeedback) {
                 cepFeedback.classList.remove('is-pending');
@@ -170,6 +171,41 @@
             }
         });
     }
+
+    // Preenche rua e bairro a partir do endereço retornado pelo CEP.
+    // Só escreve em campos vazios ou que nós mesmos preenchemos antes — nunca
+    // sobrescreve o que o cliente digitou manualmente. Na rua, deixa a vírgula
+    // pronta para o cliente só completar o número.
+    const addressField = document.getElementById('address');
+    const neighborhoodField = document.getElementById('neighborhood');
+
+    function autofillAddress(address) {
+        if (!address) return;
+
+        if (address.street && addressField &&
+            (!addressField.value.trim() || addressField.dataset.autofilled === 'true')) {
+            addressField.value = `${address.street}, `;
+            addressField.dataset.autofilled = 'true';
+            validateField(addressField);
+        }
+
+        if (address.neighborhood && neighborhoodField &&
+            (!neighborhoodField.value.trim() || neighborhoodField.dataset.autofilled === 'true')) {
+            neighborhoodField.value = address.neighborhood;
+            neighborhoodField.dataset.autofilled = 'true';
+            validateField(neighborhoodField);
+        }
+
+        saveDraft();
+    }
+
+    // Assim que o cliente edita manualmente, paramos de considerar o campo
+    // como preenchido automaticamente (não será mais sobrescrito por outro CEP).
+    [addressField, neighborhoodField].forEach((field) => {
+        if (field) {
+            field.addEventListener('input', () => { delete field.dataset.autofilled; });
+        }
+    });
 
     // ===== Seletores de quantidade nos cards de produto =====
     if (productsGrid) {

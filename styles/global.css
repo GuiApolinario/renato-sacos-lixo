@@ -1,0 +1,331 @@
+/* styles/global.css — design system (tokens, reset, tipografia, base)
+   ------------------------------------------------------------------
+   Paleta pela regra 60-30-10:
+     60%  neutro claro  (--bg-color / --surface-color)  → respiro e foco
+     30%  azul marinho  (--primary-color)               → marca, títulos, header
+     10%  verde esmeralda (--action-color)              → SÓ ações (CTA)
+
+   Regra de ouro: o verde é exclusivo de ação (comprar, checkout, frete grátis).
+   Se algo não é clicável nem é a oferta, não usa verde. É isso que faz o
+   botão "Adicionar" saltar aos olhos no meio da página. */
+
+:root {
+    /* ===== Marca (30%) ===== */
+    --primary-color: #1E3A8A;        /* azul marinho */
+    --primary-dark: #172554;
+    --primary-light: #2C4FB5;
+    --primary-soft: #E8EDFB;         /* fundo de chips/ícones */
+    --primary-soft-2: #D3DCF7;
+
+    /* ===== Ação (10%) — só CTA ===== */
+    --action-color: #10B981;         /* verde esmeralda */
+    --action-dark: #059669;
+    --action-darker: #047857;
+    --action-light: #6EE7B7;
+    --action-soft: #ECFDF5;
+    --action-soft-2: #D1FAE5;
+
+    /* ===== Neutros (60%) ===== */
+    --bg-color: #F8FAFC;
+    --surface-color: #FFFFFF;
+    --surface-alt: #F1F5F9;
+    --text-color: #334155;
+    --text-muted: #64748B;
+    --text-faint: #94A3B8;
+    --text-on-dark: #FFFFFF;
+
+    --border-color: #E2E8F0;
+    --border-strong: #CBD5E1;
+
+    /* ===== Tela de carregamento =====
+       Valores fixos (não derivam de --primary-*), porque aqueles tokens
+       clareiam no modo escuro e deixariam o preloader claro justamente para
+       quem está com o tema escuro. Aqui a tela é sempre escura. */
+    --preloader-from: #101B3D;
+    --preloader-to: #05080F;
+
+    /* ===== Estados ===== */
+    --notify-color: #EF4444;         /* badge do carrinho / erros */
+    --warning-color: #EF4444;
+    --amber-color: #F59E0B;          /* frete além do raio grátis */
+
+    /* ===== Sombras ===== */
+    --shadow-sm: 0 1px 2px rgba(30, 58, 138, 0.04), 0 2px 8px rgba(30, 58, 138, 0.06);
+    --shadow-md: 0 6px 20px rgba(30, 58, 138, 0.08);
+    --shadow-lg: 0 18px 48px rgba(30, 58, 138, 0.14);
+    --shadow-action: 0 8px 22px rgba(16, 185, 129, 0.32);
+    --shadow-sheet: 0 -12px 44px rgba(15, 23, 42, 0.22);
+
+    /* ===== Tipografia ===== */
+    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-display: 'Poppins', 'Inter', system-ui, sans-serif;
+
+    /* Escala fluida: cresce do mobile ao desktop sem quebras */
+    --fs-xs: 0.78rem;
+    --fs-sm: 0.875rem;
+    --fs-base: 1rem;
+    --fs-md: clamp(1.05rem, 0.4vw + 0.95rem, 1.15rem);
+    --fs-lg: clamp(1.2rem, 0.8vw + 1rem, 1.4rem);
+    --fs-xl: clamp(1.45rem, 1.6vw + 1rem, 1.9rem);
+    --fs-2xl: clamp(1.8rem, 2.6vw + 1rem, 2.6rem);
+    --fs-3xl: clamp(2.2rem, 4.4vw + 1rem, 3.6rem);
+
+    /* ===== Espaçamento (respiro maior no mobile) ===== */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+    --space-9: 88px;
+    --section-y: clamp(56px, 9vw, 96px);   /* respiro vertical das seções */
+
+    /* ===== Layout ===== */
+    --header-height: 64px;
+    --tap-target: 44px;                     /* alvo mínimo de toque */
+    --container-pad: var(--space-5);        /* usado pelo .container e por quem "sangra" para fora dele */
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 28px;
+    --radius-pill: 999px;
+    --container: 1160px;
+
+    /* ===== Transições ===== */
+    --transition-fast: 0.18s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);   /* curva de bottom sheet nativo */
+
+    /* ===== Z-index ===== */
+    --z-header: 100;
+    --z-sticky: 140;
+    --z-fab: 150;
+    --z-backdrop: 200;
+    --z-sheet: 210;
+    --z-modal: 260;
+    --z-tooltip: 300;
+    --z-preloader: 400;
+
+    /* Área segura (iPhone com barra inferior) */
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-color: #93B4FF;
+        --primary-dark: #B9CDFF;
+        --primary-light: #6E92E8;
+        --primary-soft: #16213C;
+        --primary-soft-2: #1D2B4D;
+
+        --bg-color: #0B1120;
+        --surface-color: #131C2E;
+        --surface-alt: #1B2537;
+        --text-color: #CBD5E1;
+        --text-muted: #94A3B8;
+        --text-faint: #64748B;
+
+        --border-color: #253248;
+        --border-strong: #35455F;
+
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.55);
+        --shadow-sheet: 0 -12px 44px rgba(0, 0, 0, 0.6);
+    }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+* { margin: 0; padding: 0; }
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-height) + 16px);
+    background-color: var(--bg-color);
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Canvas do fundo animado — atrás de tudo, sem capturar toque */
+#bg-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+body {
+    font-family: var(--font-body);
+    font-size: var(--fs-base);
+    color: var(--text-color);
+    background-color: transparent;
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* Trava a rolagem do fundo enquanto o bottom sheet está aberto */
+body.no-scroll { overflow: hidden; }
+
+h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--primary-color);
+    text-wrap: balance;
+}
+
+h1 { font-size: var(--fs-3xl); font-weight: 800; }
+h2 { font-size: var(--fs-2xl); }
+h3 { font-size: var(--fs-lg); }
+h4 { font-size: var(--fs-md); }
+
+p { color: var(--text-color); }
+
+a {
+    color: var(--action-dark);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+a:hover { color: var(--action-darker); }
+
+button {
+    font-family: var(--font-body);
+    font-size: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: inherit;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;   /* remove o atraso de 300ms no toque */
+    transition: transform var(--transition-fast), background-color var(--transition-fast),
+                box-shadow var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+ul { list-style: none; }
+svg { display: block; max-width: 100%; }
+img { max-width: 100%; display: block; }
+
+/* ===== Formulários ===== */
+input, textarea, select {
+    font-family: var(--font-body);
+    font-size: 1rem;              /* 16px evita o zoom automático do iOS */
+    color: var(--text-color);
+    background-color: var(--surface-color);
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 0.85rem 1rem;
+    width: 100%;
+    min-height: var(--tap-target);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input::placeholder, textarea::placeholder { color: var(--text-faint); }
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--action-color);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+}
+
+input.is-invalid, textarea.is-invalid {
+    border-color: var(--warning-color);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.14);
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    font-size: var(--fs-sm);
+    color: var(--primary-color);
+}
+
+/* ===== Acessibilidade ===== */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--primary-color);
+    color: var(--text-on-dark);
+    padding: var(--space-2) var(--space-4);
+    z-index: var(--z-tooltip);
+    border-radius: 0 0 var(--radius-sm) 0;
+}
+.skip-link:focus { left: 0; }
+
+:focus-visible {
+    outline: 3px solid var(--action-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Só para leitores de tela */
+.sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Números alinhados (preços/totais) */
+.num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+/* ===== Layout ===== */
+.container {
+    width: 100%;
+    max-width: var(--container);
+    margin: 0 auto;
+    padding-inline: var(--container-pad);
+}
+
+section { padding-block: var(--section-y); }
+
+.section-head {
+    max-width: 620px;
+    margin: 0 auto var(--space-7);
+    text-align: center;
+}
+
+.section-title { margin: 0 auto; }
+
+.section-subtitle {
+    color: var(--text-muted);
+    margin-top: var(--space-4);
+    font-size: var(--fs-md);
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    color: var(--primary-color);
+    background: var(--primary-soft);
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    margin-bottom: var(--space-4);
+}

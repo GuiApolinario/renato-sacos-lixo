@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Sacos de lixo reforçados com frete grátis em até 15km de Sorocaba e entrega em 24-48h. Peça em 3 passos e pague com PIX.">
+    <meta name="theme-color" content="#1E3A8A">
+
+    <meta property="og:title" content="Renato Embalagens — Sacos Reforçados · Frete Grátis até 15km">
+    <meta property="og:description" content="30 unidades por pacote, frete grátis em até 15km de Sorocaba e entrega em 24-48h. Pedido rápido em 3 passos.">
+    <meta property="og:image" content="./assets/images/logo-quokka.webp">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_BR">
+
+    <title>Renato Embalagens | Sacos Reforçados · Sorocaba e Região</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon.png">
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+    <link rel="canonical" href="https://renato.ggsistemas.dev.br/">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./styles/global.css">
+    <link rel="stylesheet" href="./styles/components.css">
+    <link rel="stylesheet" href="./styles/animations.css">
+    <link rel="stylesheet" href="./styles/responsive.css">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Renato Embalagens",
+        "image": "https://renato.ggsistemas.dev.br/assets/images/logo-quokka.webp",
+        "url": "https://renato.ggsistemas.dev.br/",
+        "telephone": "+5515997742737",
+        "priceRange": "R$28 - R$48",
+        "areaServed": "Sorocaba e região, SP",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Sorocaba",
+            "addressRegion": "SP",
+            "addressCountry": "BR"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div id="preloader" class="preloader" role="presentation" aria-hidden="true">
+        <div class="preloader-content">
+            <div class="preloader-media">
+                <!-- Anel de progresso girando ao redor da foto -->
+                <svg class="preloader-ring" viewBox="0 0 132 132" aria-hidden="true">
+                    <circle class="preloader-ring-track" cx="66" cy="66" r="61"></circle>
+                    <circle class="preloader-ring-arc" cx="66" cy="66" r="61"></circle>
+                </svg>
+                <img src="./assets/images/renato-fundador.webp" alt="" width="104" height="104" class="preloader-photo">
+            </div>
+
+            <p class="preloader-label">Renato <span>Embalagens</span></p>
+            <p class="preloader-tagline">Sacos reforçados · Sorocaba e região</p>
+
+            <span class="preloader-dots" aria-hidden="true">
+                <i></i><i></i><i></i>
+            </span>
+        </div>
+    </div>
+
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+    <a class="skip-link" href="#main">Pular para o conteúdo</a>
+
+    <!-- FAIXA DE COBERTURA -->
+    <div class="coverage-bar" role="note">
+        <div class="coverage-inner">
+            <svg class="coverage-pin" viewBox="0 0 24 24" aria-hidden="true" width="15" height="15"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+            <p><strong>Sede em Sorocaba-SP.</strong> Atendemos Sorocaba e Região.<span class="coverage-extra"> Demais localidades: sujeito a cálculo de frete.</span></p>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header" id="header">
+        <nav class="navbar" aria-label="Navegação principal">
+            <a class="logo" href="#hero" aria-label="Renato Embalagens — ir para o início">
+                <img class="logo-img" src="./assets/images/logo-quokka.webp" alt="" width="38" height="38">
+                <span class="logo-text">Renato <span>Embalagens</span></span>
+            </a>
+
+            <ul class="nav-menu is-collapsed" id="nav-menu">
+                <li><a href="#products" class="nav-link">Produtos</a></li>
+                <li><a href="#why" class="nav-link">Diferenciais</a></li>
+                <li><a href="#about" class="nav-link">Quem Somos</a></li>
+                <li><a href="#history" class="nav-link">História</a></li>
+                <li><a href="#contact" class="nav-link">Contato</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <a href="#products" class="btn btn-action btn-sm btn-header-cta">Peça agora</a>
+
+                <!-- Carrinho (desktop) -->
+                <button type="button" class="cart-button" id="cart-button" aria-haspopup="dialog" aria-controls="cart-sheet" aria-expanded="false">
+                    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.55L21 8H6"/><circle cx="10" cy="20" r="1.4" fill="currentColor"/><circle cx="18" cy="20" r="1.4" fill="currentColor"/></svg>
+                    <span class="cart-count" id="cart-count" hidden>0</span>
+                    <span class="sr-only">Abrir meu carrinho</span>
+                </button>
+
+                <button class="hamburger" id="hamburger" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main">
+        <!-- HERO -->
+        <section class="hero" id="hero">
+            <div class="container hero-inner">
+                <div class="hero-content">
+                    <span class="eyebrow">Sacos reforçados · 30 un. por pacote</span>
+
+                    <h1 class="hero-title">
+                        Sacos de lixo que <span class="hl">não rasgam</span>, entregues na sua porta.
+                    </h1>
+
+                    <p class="hero-sub">
+                        Material reforçado e preço justo, com atendimento direto do Renato pelo WhatsApp — do pedido à entrega.
+                    </p>
+
+                    <!-- Oferta em destaque: o que mais converte, bem grande -->
+                    <ul class="offer-grid" aria-label="Principais benefícios">
+                        <li class="offer-card offer-card--action">
+                            <span class="offer-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="26" height="26"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.9" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="18" r="1.9" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+                            </span>
+                            <strong class="offer-headline">FRETE GRÁTIS</strong>
+                            <span class="offer-detail">em até 15&nbsp;km de Sorocaba</span>
+                        </li>
+                        <li class="offer-card">
+                            <span class="offer-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="26" height="26"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 7v5.2l3.4 2"/></svg>
+                            </span>
+                            <strong class="offer-headline">24-48h</strong>
+                            <span class="offer-detail">entrega na sua casa</span>
+                        </li>
+                    </ul>
+
+                    <div class="hero-cta">
+                        <a href="#products" class="btn btn-action btn-lg">Montar meu pedido</a>
+                        <a href="#why" class="btn btn-outline btn-lg">Por que a gente?</a>
+                    </div>
+
+                    <ul class="hero-trust" aria-label="Garantias">
+                        <li><span class="dot" aria-hidden="true"></span> Pagamento via PIX</li>
+                        <li><span class="dot" aria-hidden="true"></span> Sem pedido mínimo</li>
+                        <li><span class="dot" aria-hidden="true"></span> Suporte por WhatsApp</li>
+                    </ul>
+                </div>
+
+                <div class="hero-visual" aria-hidden="true">
+                    <div class="hero-stage">
+                        <div class="hero-glow"></div>
+                        <div class="hero-pedestal"></div>
+                        <img class="hero-mascot" src="./assets/images/logo-quokka.webp" alt="" width="300" height="300" fetchpriority="high">
+                        <div class="hero-chip hero-chip-1"><strong>15km</strong> frete grátis</div>
+                        <div class="hero-chip hero-chip-2"><strong>24-48h</strong> na sua porta</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIFERENCIAIS -->
+        <section class="why-us" id="why">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="eyebrow">Por que a Renato Embalagens</span>
+                    <h2 class="section-title">Simples, resistente e sem enrolação</h2>
+                </div>
+
+                <div class="why-grid">
+                    <article class="why-card reveal">
+                        <div class="why-icon" aria-hidden="true">
+                            <svg viewBox="0 0 48 48"><path d="M14 12h20l4 9c2 5 2 10 2 14 0 10-9 15-16 15s-16-5-16-15c0-4 0-9 2-14z" fill="none" stroke="currentColor" stroke-width="2.5"/><line x1="18" y1="21" x2="18" y2="40" stroke="currentColor" stroke-width="2.5"/><line x1="24" y1="19" x2="24" y2="42" stroke="currentColor" stroke-width="2.5"/><line x1="30" y1="21" x2="30" y2="40" stroke="currentColor" stroke-width="2.5"/></svg>
+                        </div>
+                        <h3>Material premium</h3>
+                        <p>Polietileno reforçado, 30 unidades por pacote — aguenta o dia a dia sem rasgar.</p>
+                    </article>
+
+                    <article class="why-card reveal">
+                        <div class="why-icon" aria-hidden="true">
+                            <svg viewBox="0 0 48 48"><rect x="4" y="18" width="24" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M28 22h8l6 6v4h-14z" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="13" cy="36" r="4" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="33" cy="36" r="4" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+                        </div>
+                        <h3>Entrega rápida</h3>
+                        <p>24-48h em Sorocaba e região, com frete grátis em até 15km e sem pedido mínimo.</p>
+                    </article>
+
+                    <article class="why-card reveal">
+                        <div class="why-icon" aria-hidden="true">
+                            <svg viewBox="0 0 48 48"><path d="M24 4 42 11v11c0 13-8 21-18 22C14 43 6 35 6 22V11z" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M17 24l5 5 10-11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <h3>Garantia total</h3>
+                        <p>Chegou danificado? A gente resolve — reposição garantida, sem burocracia.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- VITRINE -->
+        <section class="products" id="products">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="eyebrow">Nossa vitrine</span>
+                    <h2 class="section-title">Escolha o tamanho e adicione</h2>
+                    <p class="section-subtitle">30 unidades por pacote · material reforçado · frete grátis em até 15km</p>
+                </div>
+
+                <div class="filters" id="filters" role="tablist" aria-label="Filtrar produtos por tipo de uso">
+                    <button type="button" class="chip is-active" data-filter="all" role="tab" aria-selected="true">Todos</button>
+                    <button type="button" class="chip" data-filter="domestico" role="tab" aria-selected="false">🏠 Doméstico</button>
+                    <button type="button" class="chip" data-filter="industrial" role="tab" aria-selected="false">🏭 Industrial</button>
+                    <button type="button" class="chip" data-filter="condominio" role="tab" aria-selected="false">🏢 Condomínios</button>
+                </div>
+
+                <!-- Para exibir estrelas num card, adicione data-rating="4.8" data-reviews="37".
+                     Sem esses atributos nada é renderizado: avaliação só entra no ar com
+                     número real do cliente (inventar nota é propaganda enganosa). -->
+                <div class="products-grid" id="products-grid">
+                    <article class="product-card reveal" data-size="20" data-price="28.00" data-use="domestico">
+                        <div class="product-top">
+                            <div class="product-media" aria-hidden="true">
+                                <svg viewBox="0 0 100 100"><path d="M28 22h44l6 14c3 8 4 16 4 24 0 20-14 34-32 34S18 88 18 68c0-8 1-16 4-24z" fill="none" stroke="currentColor" stroke-width="4"/><line x1="34" y1="36" x2="34" y2="78" stroke="currentColor" stroke-width="3"/><line x1="50" y1="32" x2="50" y2="82" stroke="currentColor" stroke-width="3"/><line x1="66" y1="36" x2="66" y2="78" stroke="currentColor" stroke-width="3"/></svg>
+                            </div>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-name">20 Litros</h3>
+                            <p class="product-desc">Cozinha e banheiro · 30 unidades</p>
+                            <div class="product-rating" data-rating-slot></div>
+                            <p class="product-price">
+                                <span class="price num">R$&nbsp;28,00</span>
+                                <span class="price-unit num">R$&nbsp;0,93 / un.</span>
+                            </p>
+                        </div>
+                        <div class="product-actions">
+                            <div class="stepper" role="group" aria-label="Quantidade de pacotes de 20 litros">
+                                <button type="button" class="stepper-btn" data-step="-1" aria-label="Diminuir quantidade de 20 litros">−</button>
+                                <span class="stepper-value" data-qty aria-live="polite" aria-atomic="true">1</span>
+                                <button type="button" class="stepper-btn" data-step="1" aria-label="Aumentar quantidade de 20 litros">+</button>
+                            </div>
+                            <button type="button" class="btn btn-action btn-add" data-add aria-label="Adicionar pacote de 20 litros ao carrinho">Adicionar</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card reveal is-featured" data-size="40" data-price="32.00" data-use="domestico condominio">
+                        <span class="product-badge product-badge--hot">Mais vendido</span>
+                        <div class="product-top">
+                            <div class="product-media" aria-hidden="true">
+                                <svg viewBox="0 0 100 100"><path d="M26 20h48l7 15c3 9 4 17 4 25 0 21-16 36-34 36S17 90 17 60c0-8 1-16 4-25z" fill="none" stroke="currentColor" stroke-width="4"/><line x1="33" y1="35" x2="33" y2="80" stroke="currentColor" stroke-width="3"/><line x1="50" y1="31" x2="50" y2="84" stroke="currentColor" stroke-width="3"/><line x1="67" y1="35" x2="67" y2="80" stroke="currentColor" stroke-width="3"/></svg>
+                            </div>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-name">40 Litros</h3>
+                            <p class="product-desc">O queridinho do dia a dia · 30 unidades</p>
+                            <div class="product-rating" data-rating-slot></div>
+                            <p class="product-price">
+                                <span class="price num">R$&nbsp;32,00</span>
+                                <span class="price-unit num">R$&nbsp;1,07 / un.</span>
+                            </p>
+                        </div>
+                        <div class="product-actions">
+                            <div class="stepper" role="group" aria-label="Quantidade de pacotes de 40 litros">
+                                <button type="button" class="stepper-btn" data-step="-1" aria-label="Diminuir quantidade de 40 litros">−</button>
+                                <span class="stepper-value" data-qty aria-live="polite" aria-atomic="true">1</span>
+                                <button type="button" class="stepper-btn" data-step="1" aria-label="Aumentar quantidade de 40 litros">+</button>
+                            </div>
+                            <button type="button" class="btn btn-action btn-add" data-add aria-label="Adicionar pacote de 40 litros ao carrinho">Adicionar</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card reveal" data-size="60" data-price="38.00" data-use="domestico condominio industrial">
+                        <div class="product-top">
+                            <div class="product-media" aria-hidden="true">
+                                <svg viewBox="0 0 100 100"><path d="M24 18h52l8 16c3 10 4 18 4 27 0 22-17 38-36 38S16 91 16 61c0-9 1-17 4-27z" fill="none" stroke="currentColor" stroke-width="4"/><line x1="32" y1="34" x2="32" y2="82" stroke="currentColor" stroke-width="3"/><line x1="50" y1="30" x2="50" y2="86" stroke="currentColor" stroke-width="3"/><line x1="68" y1="34" x2="68" y2="82" stroke="currentColor" stroke-width="3"/></svg>
+                            </div>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-name">60 Litros</h3>
+                            <p class="product-desc">Áreas comuns e volumes maiores · 30 unidades</p>
+                            <div class="product-rating" data-rating-slot></div>
+                            <p class="product-price">
+                                <span class="price num">R$&nbsp;38,00</span>
+                                <span class="price-unit num">R$&nbsp;1,27 / un.</span>
+                            </p>
+                        </div>
+                        <div class="product-actions">
+                            <div class="stepper" role="group" aria-label="Quantidade de pacotes de 60 litros">
+                                <button type="button" class="stepper-btn" data-step="-1" aria-label="Diminuir quantidade de 60 litros">−</button>
+                                <span class="stepper-value" data-qty aria-live="polite" aria-atomic="true">1</span>
+                                <button type="button" class="stepper-btn" data-step="1" aria-label="Aumentar quantidade de 60 litros">+</button>
+                            </div>
+                            <button type="button" class="btn btn-action btn-add" data-add aria-label="Adicionar pacote de 60 litros ao carrinho">Adicionar</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card reveal" data-size="100" data-price="48.00" data-use="industrial condominio">
+                        <span class="product-badge product-badge--value">Melhor custo-benefício</span>
+                        <div class="product-top">
+                            <div class="product-media" aria-hidden="true">
+                                <svg viewBox="0 0 100 100"><path d="M22 16h56l9 17c4 11 5 20 5 29 0 23-19 40-39 40S14 95 14 65c0-9 1-18 5-29z" fill="none" stroke="currentColor" stroke-width="4"/><line x1="31" y1="33" x2="31" y2="84" stroke="currentColor" stroke-width="3"/><line x1="50" y1="29" x2="50" y2="88" stroke="currentColor" stroke-width="3"/><line x1="69" y1="33" x2="69" y2="84" stroke="currentColor" stroke-width="3"/></svg>
+                            </div>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-name">100 Litros</h3>
+                            <p class="product-desc">Alta resistência para uso pesado · 30 unidades</p>
+                            <div class="product-rating" data-rating-slot></div>
+                            <p class="product-price">
+                                <span class="price num">R$&nbsp;48,00</span>
+                                <span class="price-unit num">R$&nbsp;1,60 / un.</span>
+                            </p>
+                        </div>
+                        <div class="product-actions">
+                            <div class="stepper" role="group" aria-label="Quantidade de pacotes de 100 litros">
+                                <button type="button" class="stepper-btn" data-step="-1" aria-label="Diminuir quantidade de 100 litros">−</button>
+                                <span class="stepper-value" data-qty aria-live="polite" aria-atomic="true">1</span>
+                                <button type="button" class="stepper-btn" data-step="1" aria-label="Aumentar quantidade de 100 litros">+</button>
+                            </div>
+                            <button type="button" class="btn btn-action btn-add" data-add aria-label="Adicionar pacote de 100 litros ao carrinho">Adicionar</button>
+                        </div>
+                    </article>
+                </div>
+
+                <p class="products-empty" id="products-empty" hidden>
+                    Nenhum produto nessa categoria.
+                    <button type="button" class="link-btn" data-filter-reset>Ver todos</button>
+                </p>
+            </div>
+        </section>
+
+        <!-- ATENDIMENTO HUMANIZADO -->
+        <section class="human" id="orcamento">
+            <div class="container">
+                <div class="human-card reveal">
+                    <img class="human-photo" src="./assets/images/renato-fundador.webp"
+                         alt="Renato, fundador da Renato Embalagens" width="96" height="96" loading="lazy">
+
+                    <div class="human-copy">
+                        <span class="human-tag">Atendimento humanizado</span>
+                        <h2 class="human-title">Prefere falar com uma pessoa?</h2>
+                        <p>
+                            Precisa de uma quantidade maior, tem dúvida sobre qual litragem escolher
+                            ou quer um preço para condomínio e empresa? Fale direto com o Renato —
+                            sem robô, sem formulário, sem espera.
+                        </p>
+                    </div>
+
+                    <div class="human-action">
+                        <button type="button" class="btn btn-action btn-lg btn-whatsapp"
+                                data-whatsapp="Olá, Renato! Gostaria de solicitar um orçamento para sacos de lixo. Pode me ajudar?">
+                            <svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.91-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.07 4.49.71.3 1.27.49 1.7.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.08-.12-.28-.2-.57-.35M12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.89-9.89 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.89-9.88 9.89m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.49-8.41"/></svg>
+                            Solicitar orçamento com o Renato
+                        </button>
+                        <span class="human-note">Resposta pelo WhatsApp · (15) 99774-2737</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHECKOUT -->
+        <section class="checkout" id="checkout">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="eyebrow">Finalize seu pedido</span>
+                    <h2 class="section-title">Rápido, em 3 passos</h2>
+                </div>
+
+                <div class="wizard" id="wizard">
+                    <ol class="steps" id="steps" aria-label="Etapas do pedido">
+                        <li class="step is-active" data-step="1"><span class="step-num">1</span><span class="step-label">Seus dados</span></li>
+                        <li class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Entrega</span></li>
+                        <li class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Pagamento</span></li>
+                    </ol>
+
+                    <form class="checkout-form" id="checkout-form" novalidate>
+                        <!-- PASSO 1 — SEUS DADOS -->
+                        <fieldset class="panel is-active" data-panel="1">
+                            <legend class="panel-title">Quem vai receber?</legend>
+
+                            <div class="field">
+                                <label for="name">Nome completo *</label>
+                                <input type="text" id="name" name="name" placeholder="Ex: João Silva"
+                                       autocomplete="name" enterkeyhint="next" required>
+                                <span class="field-msg" data-for="name" role="status"></span>
+                            </div>
+
+                            <div class="field">
+                                <label for="phone">WhatsApp *</label>
+                                <input type="tel" id="phone" name="phone" placeholder="(15) 99999-9999"
+                                       inputmode="numeric" autocomplete="tel-national" maxlength="15"
+                                       enterkeyhint="next" required>
+                                <span class="field-msg" data-for="phone" role="status"></span>
+                                <p class="field-hint">É por aqui que o Renato confirma seu pedido.</p>
+                            </div>
+
+                            <div class="panel-actions">
+                                <button type="button" class="btn btn-action btn-block" data-next="2">Continuar</button>
+                            </div>
+                        </fieldset>
+
+                        <!-- PASSO 2 — ENTREGA E FRETE -->
+                        <fieldset class="panel" data-panel="2">
+                            <legend class="panel-title">Onde entregamos?</legend>
+
+                            <div class="field">
+                                <label for="cep">CEP *</label>
+                                <input type="text" id="cep" name="cep" placeholder="18117-131"
+                                       inputmode="numeric" autocomplete="postal-code" maxlength="9"
+                                       enterkeyhint="next" required>
+                                <span class="field-msg" data-for="cep" role="status"></span>
+                            </div>
+
+                            <!-- Frete gamificado -->
+                            <div class="freight" id="freight" hidden>
+                                <div class="freight-track">
+                                    <div class="freight-fill" id="freight-fill"></div>
+                                    <span class="freight-marker" aria-hidden="true"></span>
+                                </div>
+                                <div class="freight-labels" aria-hidden="true">
+                                    <span>0 km</span><span>15 km</span><span>25 km+</span>
+                                </div>
+                            </div>
+
+                            <p class="freight-unlock" id="freight-unlock" hidden>
+                                <span aria-hidden="true">🔓</span> Frete grátis desbloqueado!
+                            </p>
+
+                            <div class="field">
+                                <label for="address">Rua e número *</label>
+                                <input type="text" id="address" name="address" placeholder="Rua das Flores, 123"
+                                       autocomplete="street-address" enterkeyhint="next" required>
+                                <span class="field-msg" data-for="address" role="status"></span>
+                            </div>
+
+                            <div class="field-row">
+                                <div class="field">
+                                    <label for="neighborhood">Bairro *</label>
+                                    <input type="text" id="neighborhood" name="neighborhood" placeholder="Centro" enterkeyhint="next" required>
+                                    <span class="field-msg" data-for="neighborhood" role="status"></span>
+                                </div>
+                                <div class="field">
+                                    <label for="complement">Complemento</label>
+                                    <input type="text" id="complement" name="complement" placeholder="Apto 101" enterkeyhint="next">
+                                </div>
+                            </div>
+
+                            <div class="panel-actions">
+                                <button type="button" class="btn btn-ghost" data-prev="1">Voltar</button>
+                                <button type="button" class="btn btn-action" data-next="3">Continuar</button>
+                            </div>
+                        </fieldset>
+
+                        <!-- PASSO 3 — PAGAMENTO -->
+                        <fieldset class="panel" data-panel="3">
+                            <legend class="panel-title">Pagamento e confirmação</legend>
+
+                            <div class="review" id="review">
+                                <div class="review-line"><span>Itens</span><strong id="review-items">0 pacotes</strong></div>
+                                <div class="review-line"><span>Subtotal</span><strong class="num" id="review-subtotal">R$ 0,00</strong></div>
+                                <div class="review-line"><span>Frete</span><strong id="review-freight">informe o CEP</strong></div>
+                                <div class="review-line review-total"><span>Total</span><strong class="num" id="review-total">R$ 0,00</strong></div>
+                                <button type="button" class="link-btn" id="review-edit">Ajustar itens do carrinho</button>
+                            </div>
+
+                            <div class="pay-option">
+                                <input type="radio" id="pix" name="payment" value="pix" checked>
+                                <label for="pix">
+                                    <strong>PIX</strong>
+                                    <small>Chave (telefone): <code id="pix-key">+5515997742737</code></small>
+                                </label>
+                            </div>
+
+                            <div class="pay-actions">
+                                <p>Copie a chave para pagar agora — ou pague na entrega.</p>
+                                <button type="button" class="btn btn-outline btn-sm" id="copy-pix">Copiar chave PIX</button>
+                            </div>
+
+                            <div class="field checkbox">
+                                <input type="checkbox" id="already-paid" name="already-paid">
+                                <label for="already-paid">Já efetuei o pagamento via PIX</label>
+                            </div>
+
+                            <div class="field">
+                                <label for="notes">Observações (opcional)</label>
+                                <textarea id="notes" name="notes" rows="3" placeholder="Ponto de referência, horário preferido..."></textarea>
+                            </div>
+
+                            <p class="form-error" id="form-error" role="alert" hidden></p>
+
+                            <button type="submit" class="btn btn-action btn-block btn-submit" id="btn-submit">
+                                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.91-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.07 4.49.71.3 1.27.49 1.7.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.08-.12-.28-.2-.57-.35M12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.89-9.89 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.89-9.88 9.89m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.49-8.41"/></svg>
+                                Enviar pedido via WhatsApp
+                            </button>
+
+                            <!-- Selos de confiança logo abaixo do botão -->
+                            <ul class="trust-seals" aria-label="Garantias de segurança">
+                                <li>
+                                    <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 3 20 6v5.5c0 5.2-3.4 8.6-8 9.5-4.6-.9-8-4.3-8-9.5V6z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4.5"/></svg>
+                                    Pagamento seguro via PIX
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M8 10V7.5a4 4 0 0 1 8 0V10"/></svg>
+                                    Site seguro (HTTPS)
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="m8 12.5 2.5 2.5L16 9.5"/></svg>
+                                    Compra garantida: 30 dias
+                                </li>
+                            </ul>
+
+                            <div class="panel-actions">
+                                <button type="button" class="btn btn-ghost btn-block" data-prev="2">Voltar</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUEM SOMOS -->
+        <section class="about" id="about">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="eyebrow">Quem somos</span>
+                    <h2 class="section-title">Qualidade, confiança e atendimento próximo</h2>
+                </div>
+
+                <div class="about-grid">
+                    <article class="about-card reveal">
+                        <h3>Sobre o Renato</h3>
+                        <p>Empreendedor de Sorocaba focado em resolver o problema de limpeza da comunidade com produtos de qualidade e preço acessível.</p>
+                    </article>
+                    <article class="about-card reveal">
+                        <h3>Nossa missão</h3>
+                        <p>Fornecer sacos reforçados com entrega rápida e frete grátis em até 15km, simplificando a compra de um item essencial do dia a dia.</p>
+                    </article>
+                    <article class="about-card reveal">
+                        <h3>Nossos valores</h3>
+                        <ul class="values">
+                            <li>Qualidade</li><li>Confiabilidade</li><li>Transparência</li><li>Foco no cliente</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="vision reveal">
+                    <h3>Nossa visão</h3>
+                    <p>Ser a referência em sacos de lixo reforçado no interior de São Paulo, unindo qualidade, confiança e conveniência para transformar a rotina de limpeza numa experiência sem preocupações.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- HISTÓRIA -->
+        <section class="history" id="history">
+            <div class="container history-layout">
+                <div class="history-copy">
+                    <span class="eyebrow reveal">Nossa trajetória</span>
+                    <h2 class="section-title section-title--left reveal">Nossa história</h2>
+                    <p class="reveal">
+                        A Renato Embalagens nasceu de um problema simples e comum em Sorocaba e região:
+                        encontrar sacos de lixo resistentes, com entrega rápida e sem complicação. Foi essa
+                        dificuldade do dia a dia que motivou o Renato a montar o próprio negócio — vendendo
+                        direto, sem intermediário, com atendimento pessoal pelo WhatsApp do pedido à entrega.
+                    </p>
+                    <p class="reveal">
+                        Hoje, cada pacote ainda passa pelas mãos do Renato antes de sair para a entrega. É esse
+                        cuidado — mais do que o tamanho da operação — que sustenta a confiança da marca na região.
+                    </p>
+                </div>
+
+                <div class="history-grid">
+                    <article class="history-card reveal">
+                        <span class="history-label">Como começou</span>
+                        <p>Resolver, na prática, a dificuldade de comprar sacos reforçados com entrega rápida — sem depender de grandes redes.</p>
+                    </article>
+                    <article class="history-card reveal">
+                        <span class="history-label">Como trabalhamos</span>
+                        <p>Cada pedido é preparado e conferido pessoalmente, com atendimento direto pelo WhatsApp do início ao fim.</p>
+                    </article>
+                    <article class="history-card reveal">
+                        <span class="history-label">Pra onde vamos</span>
+                        <p>Ampliar o alcance da entrega na região, mantendo o mesmo padrão de qualidade e atendimento próximo.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONFIANÇA -->
+        <section class="trust" id="trust">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="eyebrow">Compre com confiança</span>
+                    <h2 class="section-title">Sem letra miúda</h2>
+                </div>
+                <div class="trust-grid">
+                    <article class="trust-item reveal">
+                        <strong>30 dias</strong>
+                        <span>para trocar se estiver insatisfeito</span>
+                    </article>
+                    <article class="trust-item reveal">
+                        <strong>Frete grátis até 15km</strong>
+                        <span>a partir de Sorocaba, sem pedido mínimo</span>
+                    </article>
+                    <article class="trust-item reveal">
+                        <strong>Suporte direto</strong>
+                        <span>via WhatsApp com o próprio Renato</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer" id="contact">
+        <canvas id="footer-canvas" aria-hidden="true"></canvas>
+
+        <div class="container footer-grid">
+            <div class="footer-col reveal">
+                <div class="footer-brand">
+                    <img src="./assets/images/logo-quokka.webp" alt="" width="38" height="38">
+                    <span>Renato Embalagens</span>
+                </div>
+                <p>Sacos reforçados, frete grátis em até 15km e entrega em 24-48h em Sorocaba e região.</p>
+            </div>
+
+            <div class="footer-col reveal">
+                <div class="founder">
+                    <img src="./assets/images/renato-fundador.webp" alt="Renato, fundador da Renato Embalagens" width="60" height="60" loading="lazy">
+                    <div>
+                        <h3>Renato</h3>
+                        <p class="founder-role">Fundador</p>
+                    </div>
+                </div>
+                <p>📍 Sorocaba, SP</p>
+                <p>📱 <a href="https://wa.me/5515997742737" target="_blank" rel="noopener">WhatsApp: (15) 99774-2737</a></p>
+            </div>
+
+            <div class="footer-col reveal">
+                <h3>Atendimento</h3>
+                <p>✓ Frete grátis até 15km</p>
+                <p>✓ Entrega em 24-48h</p>
+                <p>✓ Suporte via WhatsApp</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year">2026</span> Renato Embalagens. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- CARRINHO (bottom sheet no mobile / painel lateral no desktop) -->
+    <div class="sheet-backdrop" id="sheet-backdrop" hidden></div>
+
+    <aside class="sheet" id="cart-sheet" role="dialog" aria-modal="true" aria-labelledby="cart-sheet-title" hidden>
+        <div class="sheet-handle" aria-hidden="true"></div>
+
+        <header class="sheet-header">
+            <h2 id="cart-sheet-title">Meu carrinho</h2>
+            <button type="button" class="icon-btn" id="cart-close" aria-label="Fechar carrinho">
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+        </header>
+
+        <div class="sheet-body">
+            <div id="cart-items" class="cart-items"></div>
+            <p class="cart-empty" id="cart-empty">Seu carrinho está vazio. Escolha um tamanho na vitrine! 🛒</p>
+
+            <dl class="cart-totals">
+                <div><dt>Subtotal</dt><dd class="num" id="cart-subtotal">R$ 0,00</dd></div>
+                <div><dt>Frete</dt><dd id="cart-freight">informe o CEP</dd></div>
+                <div class="cart-total"><dt>Total</dt><dd class="num" id="cart-total">R$ 0,00</dd></div>
+            </dl>
+        </div>
+
+        <footer class="sheet-footer">
+            <button type="button" class="btn btn-action btn-block btn-lg" id="cart-checkout">Finalizar pedido</button>
+            <ul class="trust-seals trust-seals--compact" aria-label="Garantias">
+                <li>🔒 PIX seguro</li>
+                <li>✓ Compra garantida</li>
+            </ul>
+        </footer>
+    </aside>
+
+    <!-- BARRA FIXA DE CHECKOUT (mobile) -->
+    <div class="sticky-cta" id="sticky-cta" hidden>
+        <button type="button" class="sticky-cta-summary" id="sticky-cta-open" aria-haspopup="dialog" aria-controls="cart-sheet">
+            <span class="sticky-cta-count num" id="sticky-cta-count">0</span>
+            <span class="sticky-cta-labels">
+                <span class="sticky-cta-caption">Ver carrinho</span>
+                <span class="sticky-cta-total num" id="sticky-cta-total">R$ 0,00</span>
+            </span>
+        </button>
+        <button type="button" class="btn btn-action sticky-cta-go" id="sticky-cta-checkout">Finalizar pedido</button>
+    </div>
+
+    <button type="button" class="whatsapp-fab" id="whatsapp-fab" aria-label="Tirar dúvida no WhatsApp">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.91-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.07 4.49.71.3 1.27.49 1.7.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.08-.12-.28-.2-.57-.35M12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.89-9.89 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.89-9.88 9.89m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.49-8.41"/></svg>
+    </button>
+
+    <script src="./scripts/preloader.js" defer></script>
+    <script src="./scripts/background-scenes.js" defer></script>
+    <!-- whatsapp-integration antes de main: os scripts com defer executam na
+         ordem do documento, então quem depende de window.WA vem depois -->
+    <script src="./scripts/whatsapp-integration.js" defer></script>
+    <script src="./scripts/main.js" defer></script>
+    <script src="./scripts/shipping.js" defer></script>
+    <script src="./scripts/cart.js" defer></script>
+    <script src="./scripts/checkout.js" defer></script>
+    <script src="./scripts/animations.js" defer></script>
+</body>
+</html>
